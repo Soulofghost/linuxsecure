@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinuxSecure | Center for Internet Security (CIS) Benchmark Hardening</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-layout">
+    <header class="navbar">
+      <div class="nav-brand">
+        <div class="brand-badge">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <div>
+          <h2>LinuxSecure</h2>
+          <span class="tagline">CIS BENCHMARK HARDENING & REMEDIATION ENGINE</span>
+        </div>
+      </div>
+
+      <div class="nav-metrics">
+        <div class="metric-chip">
+          <span class="label">BENCHMARKS</span>
+          <span class="value" id="statBenchmarks">10 Rules</span>
+        </div>
+        <div class="metric-chip">
+          <span class="label">ASSESSMENTS</span>
+          <span class="value" id="statAssessments">0</span>
+        </div>
+        <div class="metric-chip">
+          <span class="label">AVG COMPLIANCE</span>
+          <span class="value text-emerald" id="statAvgScore">0%</span>
+        </div>
+        <div class="metric-chip">
+          <span class="label">CRITICAL GAPS</span>
+          <span class="value text-red" id="statCriticalFails">0</span>
+        </div>
+        <button class="btn btn-primary" id="openAuditModal">+ Assess Host</button>
+      </div>
+    </header>
+
+    <main class="main-container">
+      <div class="hero-section">
+        <div>
+          <h1>Linux CIS Benchmark Compliance & Automated Hardening</h1>
+          <p class="subtitle">Center for Internet Security (CIS) Level 1 & 2 evaluation across kernel sysctl params, SSH configurations, file permissions, and automated bash remediation synthesis.</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="nav-tabs">
+        <button class="tab-btn active" data-tab="findings">Active Host Audit</button>
+        <button class="tab-btn" data-tab="remediation">Remediation Script</button>
+        <button class="tab-btn" data-tab="history">Assessment Logs</button>
+      </div>
+
+      <!-- TAB 1: Findings -->
+      <section class="tab-pane active" id="paneFindings">
+        <div class="audit-summary-banner" id="auditSummaryBanner">
+          <div class="summary-host-info">
+            <span class="host-lbl">TARGET HOST</span>
+            <h2 id="activeHostName">bastion-host.secops.internal</h2>
+          </div>
+          <div class="summary-score-dial">
+            <div class="score-circle" id="scoreCircle">0%</div>
+            <span class="dial-caption">CIS Compliance Score</span>
+          </div>
+          <div class="summary-stats-block">
+            <div>Passed: <strong class="text-emerald" id="passedCount">0</strong></div>
+            <div>Failed: <strong class="text-red" id="failedCount">0</strong></div>
+            <div>Total: <strong id="totalCount">10</strong></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 1.5rem;">
+          <div class="card-header">
+            <h3>CIS Benchmark Findings</h3>
+            <span class="badge badge-info">Evaluation Matrix</span>
+          </div>
+          <div class="card-body">
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Rule ID</th>
+                    <th>Section</th>
+                    <th>Benchmark Title</th>
+                    <th>Severity</th>
+                    <th>Status</th>
+                    <th>Actual Value</th>
+                    <th>Required Value</th>
+                  </tr>
+                </thead>
+                <tbody id="findingsTableBody">
+                  <tr><td colspan="7" class="text-center text-muted">Run or load an assessment to view benchmark findings.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: Remediation Script -->
+      <section class="tab-pane" id="paneRemediation">
+        <div class="card">
+          <div class="card-header">
+            <h3>Automated Shell Remediation Script</h3>
+            <button class="btn btn-secondary" id="copyScriptBtn">📋 Copy Script</button>
+          </div>
+          <div class="card-body">
+            <pre class="script-pre"><code id="remediationCode">#!/usr/bin/env bash
+# Run an assessment to generate custom hardening commands for non-compliant controls.</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: History -->
+      <section class="tab-pane" id="paneHistory">
+        <div class="card">
+          <div class="card-header">
+            <h3>Historical CIS Assessments</h3>
+            <span class="badge badge-info">SQLite WAL Audit Trail</span>
+          </div>
+          <div class="card-body">
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Assessment ID</th>
+                    <th>Target Host</th>
+                    <th>Compliance Score</th>
+                    <th>Passed</th>
+                    <th>Failed</th>
+                    <th>Evaluated At</th>
+                  </tr>
+                </thead>
+                <tbody id="historyTableBody">
+                  <tr><td colspan="6" class="text-center text-muted">Loading assessment history...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal: Run Host Assessment -->
+  <div class="modal-overlay" id="auditModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Assess Host Security Configuration</h3>
+        <button class="btn-close" id="closeAuditBtn">&times;</button>
+      </div>
+      <form id="createAuditForm">
+        <div class="field">
+          <label>Target Host Identifier *</label>
+          <input type="text" id="targetHostInput" required placeholder="e.g. prod-db-01.internal" value="prod-web-01.internal">
+        </div>
+        <div class="field">
+          <label>Audit Profile</label>
+          <select id="auditProfile">
+            <option value="unhardened">Default Linux Distribution (Unhardened)</option>
+            <option value="hardened">Fully Hardened CIS Level 2 Host</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelAuditBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Execute CIS Evaluation</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
